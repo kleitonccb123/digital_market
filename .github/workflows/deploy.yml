@@ -1,4 +1,4 @@
-name: Build and deploy to Hostinger (FTPS)
+name: Build and deploy to Hostinger (SFTP)
 
 on:
   push:
@@ -28,15 +28,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy dist/ to Hostinger via FTPS
+      - name: Deploy dist/ to Hostinger via SFTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.HOSTINGER_FTP_HOST }}      # ex.: 147.93.14.207 ou ftp.sejadigitalmarket.com
-          username: ${{ secrets.HOSTINGER_FTP_USER }}    # ex.: u234345696.sejadigitalmarket.com
+          server: ${{ secrets.HOSTINGER_FTP_HOST }}
+          username: ${{ secrets.HOSTINGER_FTP_USER }}
           password: ${{ secrets.HOSTINGER_FTP_PASS }}
-          protocol: ftps
-          port: 21
-          timeout: 60000
+          protocol: sftp
+          port: 65002              # troque para a porta que o hPanel mostrar
+          timeout: 120000
           local-dir: dist/
           server-dir: public_html/
           exclude: |
