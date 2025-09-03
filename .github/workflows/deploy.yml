@@ -28,7 +28,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      # 🚀 Envia a pasta dist/ por SFTP (SCP)
       - name: Upload dist/ via SFTP
         uses: appleboy/scp-action@v0.1.7
         with:
