@@ -1,8 +1,9 @@
-name: Build and deploy to Hostinger
+name: Build and deploy to Hostinger (FTPS)
 
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -10,29 +11,35 @@ permissions:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
 
-      - name: Deploy dist to Hostinger via FTP
+      - name: Deploy dist/ to Hostinger via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.HOSTINGER_FTP_HOST }}
-          username: ${{ secrets.HOSTINGER_FTP_USER }}
+          server: ${{ secrets.HOSTINGER_FTP_HOST }}      # ex.: 147.93.14.207 ou ftp.sejadigitalmarket.com
+          username: ${{ secrets.HOSTINGER_FTP_USER }}    # ex.: u234345696.sejadigitalmarket.com
           password: ${{ secrets.HOSTINGER_FTP_PASS }}
+          protocol: ftps
           port: 21
-          protocol: ftp
+          timeout: 60000
           local-dir: dist/
           server-dir: public_html/
+          exclude: |
+            **/.git*
+            **/node_modules/**
+            **/.github/**
