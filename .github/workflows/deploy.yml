@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.HOSTINGER_FTP_USER }}
           password: ${{ secrets.HOSTINGER_FTP_PASS }}
           protocol: sftp
-          port: 65002              # troque para a porta que o hPanel mostrar
+          port: 65002
           timeout: 120000
           local-dir: dist/
           server-dir: public_html/
