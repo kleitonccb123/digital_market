@@ -28,12 +28,11 @@ jobs:
 
       - name: Deploy dist to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4
-
         with:
           server: ${{ secrets.HOSTINGER_FTP_HOST }}
           username: ${{ secrets.HOSTINGER_FTP_USER }}
           password: ${{ secrets.HOSTINGER_FTP_PASS }}
           port: 21
-          protocol: ftp
+          protocol: ftp   # se der erro de SSL, troque para ftps
           local-dir: dist/
           server-dir: public_html/
