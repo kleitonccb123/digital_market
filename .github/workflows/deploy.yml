@@ -28,18 +28,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy dist/ to Hostinger via SFTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      # 🚀 Envia a pasta dist/ por SFTP (SCP)
+      - name: Upload dist/ via SFTP
+        uses: appleboy/scp-action@v0.1.7
         with:
-          server: ${{ secrets.HOSTINGER_FTP_HOST }}
+          host: ${{ secrets.HOSTINGER_FTP_HOST }}
           username: ${{ secrets.HOSTINGER_FTP_USER }}
           password: ${{ secrets.HOSTINGER_FTP_PASS }}
-          protocol: sftp
           port: 65002
-          timeout: 120000
-          local-dir: dist/
-          server-dir: public_html/
-          exclude: |
-            **/.git*
-            **/node_modules/**
-            **/.github/**
+          source: "dist/*"
+          target: "public_html"
+          overwrite: true
