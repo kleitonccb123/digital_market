@@ -1,4 +1,4 @@
-name: Build and deploy to Hostinger (SFTP)
+name: Build and deploy to Hostinger (SFTP - domain path)
 
 on:
   push:
@@ -28,6 +28,20 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Cria a pasta do domínio e remove página padrão da Hostinger
+      - name: Prepare target folder (SSH)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOSTINGER_FTP_HOST }}       # 147.93.14.207
+          username: ${{ secrets.HOSTINGER_FTP_USER }}   # u234345696
+          password: ${{ secrets.HOSTINGER_FTP_PASS }}
+          port: 65002
+          script: |
+            mkdir -p /home/u234345696/domains/sejadigitalmarket.com/public_html
+            rm -f /home/u234345696/domains/sejadigitalmarket.com/public_html/index.html \
+                  /home/u234345696/domains/sejadigitalmarket.com/public_html/index.php || true
+
+      # Envia o build (dist/) para a pasta correta do domínio
       - name: Upload dist/ via SFTP
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -36,5 +50,5 @@ jobs:
           password: ${{ secrets.HOSTINGER_FTP_PASS }}
           port: 65002
           source: "dist/*"
-          target: "public_html"
+          target: "/home/u234345696/domains/sejadigitalmarket.com/public_html"
           overwrite: true
